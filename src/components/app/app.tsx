@@ -19,7 +19,7 @@ import {
   Routes,
   useLocation
 } from 'react-router-dom';
-import { ProtectedRoute } from '../protected-route';
+import { ProtectedRoute } from '../protected-route/protected-route';
 
 const App = () => {
   const location = useLocation();

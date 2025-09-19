@@ -17,13 +17,17 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  useLocation
+  useLocation,
+  useNavigate
 } from 'react-router-dom';
 import { ProtectedRoute } from '../protected-route/protected-route';
 
 const App = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const state = location.state as { background?: Location };
+
+  const closeModalHandler = () => navigate(-1);
 
   return (
     <div className={styles.app}>
@@ -113,7 +117,7 @@ const App = () => {
           <Route
             path='/feed/:number'
             element={
-              <Modal title='' onClose={() => {}}>
+              <Modal title='Детали заказа' onClose={closeModalHandler}>
                 <OrderInfo />
               </Modal>
             }
@@ -122,7 +126,7 @@ const App = () => {
           <Route
             path='/ingredients/:id'
             element={
-              <Modal title='' onClose={() => {}}>
+              <Modal title='Детали ингредиента' onClose={closeModalHandler}>
                 <IngredientDetails />
               </Modal>
             }
@@ -132,7 +136,7 @@ const App = () => {
             path='/profile/orders/:number'
             element={
               <ProtectedRoute>
-                <Modal title='' onClose={() => {}}>
+                <Modal title='' onClose={closeModalHandler}>
                   <OrderInfo />
                 </Modal>
               </ProtectedRoute>

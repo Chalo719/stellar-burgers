@@ -28,7 +28,7 @@ export const IngredientDetails: FC = () => {
 
   return (
     <>
-      {isIngredientsLoading || !ingredientData ? (
+      {isIngredientsLoading ? (
         <Preloader />
       ) : isIngredientsError || !ingredientData ? (
         <h3 className={`pb-6 text text_type_main-large`}>

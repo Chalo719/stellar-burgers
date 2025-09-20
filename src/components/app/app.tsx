@@ -21,11 +21,19 @@ import {
   useNavigate
 } from 'react-router-dom';
 import { ProtectedRoute } from '../protected-route/protected-route';
+import { useDispatch } from '../../services/store';
+import { getUser } from '../../services/slices/auth-slice';
+import { useEffect } from 'react';
 
 const App = () => {
+  const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state as { background?: Location };
+
+  useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch]);
 
   const closeModalHandler = () => navigate(-1);
 
@@ -43,7 +51,7 @@ const App = () => {
         <Route
           path='/login'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <Login />
             </ProtectedRoute>
           }
@@ -52,7 +60,7 @@ const App = () => {
         <Route
           path='/register'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <Register />
             </ProtectedRoute>
           }
@@ -61,7 +69,7 @@ const App = () => {
         <Route
           path='/forgot-password'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <ForgotPassword />
             </ProtectedRoute>
           }
@@ -70,7 +78,7 @@ const App = () => {
         <Route
           path='/reset-password'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <ResetPassword />
             </ProtectedRoute>
           }
@@ -136,7 +144,7 @@ const App = () => {
             path='/profile/orders/:number'
             element={
               <ProtectedRoute>
-                <Modal title='' onClose={closeModalHandler}>
+                <Modal title='Детали заказа' onClose={closeModalHandler}>
                   <OrderInfo />
                 </Modal>
               </ProtectedRoute>

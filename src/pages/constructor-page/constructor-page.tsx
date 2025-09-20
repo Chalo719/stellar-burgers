@@ -18,12 +18,13 @@ export const ConstructorPage: FC = () => {
   const ingredients = useSelector(selectIngredients);
   const isIngredientsLoading = useSelector(selectIngredientsLoading);
   const isIngredientsError = useSelector(selectIngredientsError);
+  const isIngredients = ingredients.length > 0;
 
   useEffect(() => {
-    if (!ingredients.length) {
+    if (!isIngredients) {
       dispatch(getIngredients());
     }
-  }, [dispatch]);
+  }, [dispatch, isIngredients]);
 
   return (
     <>

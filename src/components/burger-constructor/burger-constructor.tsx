@@ -12,12 +12,18 @@ import {
   selectOrderByNumber,
   selectOrderByNumberLoading
 } from '../../services/slices/order-slice';
+import { selectUser } from '../../services/slices/auth-slice';
+import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const constructorItems = useSelector(selectBurgerConstructor);
   const orderModalData = useSelector(selectOrderByNumber);
   const isOrderLoading = useSelector(selectOrderByNumberLoading);
+
+  const user = useSelector(selectUser);
 
   useEffect(() => {
     if (orderModalData) {
@@ -27,6 +33,11 @@ export const BurgerConstructor: FC = () => {
 
   const onOrderClick = () => {
     if (!constructorItems.bun || isOrderLoading) return;
+
+    if (!user) {
+      navigate('/login');
+      return;
+    }
 
     const ingredientIds = [
       constructorItems.bun._id,

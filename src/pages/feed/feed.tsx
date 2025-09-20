@@ -21,13 +21,14 @@ export const Feed: FC = () => {
   const isFeedsError = useSelector(selectFeedsError);
 
   const ingredients = useSelector(selectIngredients);
+  const isIngredients = ingredients.length > 0;
 
   useEffect(() => {
-    if (!ingredients.length) {
+    if (!isIngredients) {
       dispatch(getIngredients());
     }
     dispatch(getFeeds());
-  }, [dispatch]);
+  }, [dispatch, isIngredients]);
 
   return (
     <>

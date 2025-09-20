@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import authReducer from './slices/auth-slice';
 import ingredientsReducer from './slices/ingredients-slice';
 import feedsReducer from './slices/feeds-slice';
 import orderReducer from './slices/order-slice';
@@ -11,6 +12,7 @@ import {
 } from 'react-redux';
 
 const rootReducer = {
+  auth: authReducer,
   ingredients: ingredientsReducer,
   feeds: feedsReducer,
   order: orderReducer,

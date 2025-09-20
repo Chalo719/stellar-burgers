@@ -81,7 +81,7 @@ export const OrderInfo: FC = () => {
 
   return (
     <>
-      {isOrderLoading || !orderInfo ? (
+      {isOrderLoading ? (
         <Preloader />
       ) : isOrderError || !orderInfo ? (
         <h3 className={`pb-6 text text_type_main-large`}>

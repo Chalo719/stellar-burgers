@@ -1,21 +1,41 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
+import { useDispatch, useSelector } from '../../services/store';
+import {
+  getIngredients,
+  selectIngredients
+} from '../../services/slices/ingredients-slice';
+import { useParams } from 'react-router-dom';
+import {
+  clearOrder,
+  getOrderByNumber,
+  selectOrderByNumber,
+  selectOrderByNumberError,
+  selectOrderByNumberLoading
+} from '../../services/slices/order-slice';
 
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
-  const orderData = {
-    createdAt: '',
-    ingredients: [],
-    _id: '',
-    status: '',
-    name: '',
-    updatedAt: 'string',
-    number: 0
-  };
+  const { number } = useParams<{ number: string }>();
+  const dispatch = useDispatch();
 
-  const ingredients: TIngredient[] = [];
+  const ingredients = useSelector(selectIngredients);
+
+  const orderData = useSelector(selectOrderByNumber);
+  const isOrderLoading = useSelector(selectOrderByNumberLoading);
+  const isOrderError = useSelector(selectOrderByNumberError);
+
+  useEffect(() => {
+    if (!ingredients.length) {
+      dispatch(getIngredients());
+    }
+    dispatch(getOrderByNumber(Number(number)));
+
+    return () => {
+      dispatch(clearOrder());
+    };
+  }, [dispatch]);
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {
@@ -59,9 +79,17 @@ export const OrderInfo: FC = () => {
     };
   }, [orderData, ingredients]);
 
-  if (!orderInfo) {
-    return <Preloader />;
-  }
-
-  return <OrderInfoUI orderInfo={orderInfo} />;
+  return (
+    <>
+      {isOrderLoading ? (
+        <Preloader />
+      ) : isOrderError || !orderInfo ? (
+        <h3 className={`pb-6 text text_type_main-large`}>
+          Ошибка при выполнении запроса к серверу.
+        </h3>
+      ) : (
+        <OrderInfoUI orderInfo={orderInfo} />
+      )}
+    </>
+  );
 };

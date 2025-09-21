@@ -1,20 +1,39 @@
-import { useSelector } from '../../services/store';
+import { useDispatch, useSelector } from '../../services/store';
 
 import styles from './constructor-page.module.css';
 
 import { BurgerIngredients } from '../../components';
 import { BurgerConstructor } from '../../components';
 import { Preloader } from '../../components/ui';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
+import {
+  selectIngredientsLoading,
+  selectIngredientsError,
+  getIngredients,
+  selectIngredients
+} from '../../services/slices/ingredients-slice';
 
 export const ConstructorPage: FC = () => {
-  /** TODO: взять переменную из стора */
-  const isIngredientsLoading = false;
+  const dispatch = useDispatch();
+  const ingredients = useSelector(selectIngredients);
+  const isIngredientsLoading = useSelector(selectIngredientsLoading);
+  const isIngredientsError = useSelector(selectIngredientsError);
+  const isIngredients = ingredients.length > 0;
+
+  useEffect(() => {
+    if (!isIngredients) {
+      dispatch(getIngredients());
+    }
+  }, [dispatch, isIngredients]);
 
   return (
     <>
       {isIngredientsLoading ? (
         <Preloader />
+      ) : isIngredientsError ? (
+        <h3 className={`pb-6 text text_type_main-large`}>
+          Ошибка при выполнении запроса к серверу.
+        </h3>
       ) : (
         <main className={styles.containerMain}>
           <h1

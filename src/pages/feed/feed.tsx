@@ -1,15 +1,51 @@
 import { Preloader } from '@ui';
 import { FeedUI } from '@ui-pages';
 import { TOrder } from '@utils-types';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
+import {
+  getFeeds,
+  selectFeedsError,
+  selectFeedsLoading,
+  selectFeedsOrders
+} from '../../services/slices/feeds-slice';
+import { useDispatch, useSelector } from '../../services/store';
+import {
+  getIngredients,
+  selectIngredients
+} from '../../services/slices/ingredients-slice';
 
 export const Feed: FC = () => {
-  /** TODO: взять переменную из стора */
-  const orders: TOrder[] = [];
+  const dispatch = useDispatch();
+  const orders: TOrder[] = useSelector(selectFeedsOrders);
+  const isFeedsLoading = useSelector(selectFeedsLoading);
+  const isFeedsError = useSelector(selectFeedsError);
 
-  if (!orders.length) {
-    return <Preloader />;
-  }
+  const ingredients = useSelector(selectIngredients);
+  const isIngredients = ingredients.length > 0;
 
-  <FeedUI orders={orders} handleGetFeeds={() => {}} />;
+  useEffect(() => {
+    if (!isIngredients) {
+      dispatch(getIngredients());
+    }
+    dispatch(getFeeds());
+  }, [dispatch, isIngredients]);
+
+  return (
+    <>
+      {isFeedsLoading ? (
+        <Preloader />
+      ) : isFeedsError ? (
+        <h3 className={`pb-6 text text_type_main-large`}>
+          Ошибка при выполнении запроса к серверу.
+        </h3>
+      ) : (
+        <FeedUI
+          orders={orders}
+          handleGetFeeds={() => {
+            dispatch(getFeeds());
+          }}
+        />
+      )}
+    </>
+  );
 };

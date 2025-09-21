@@ -8,6 +8,7 @@ import {
   selectFeedsTotal,
   selectFeedsTotalToday
 } from '../../services/slices/feeds-slice';
+import { TFeed } from '../ui/feed-info/type';
 
 const getOrders = (orders: TOrder[], status: string): number[] =>
   orders
@@ -16,15 +17,15 @@ const getOrders = (orders: TOrder[], status: string): number[] =>
     .slice(0, 20);
 
 export const FeedInfo: FC = () => {
-  const orders: TOrder[] = useSelector(selectFeedsOrders);
-  const feed = {
+  const feed: TFeed = {
+    orders: useSelector(selectFeedsOrders),
     total: useSelector(selectFeedsTotal),
     totalToday: useSelector(selectFeedsTotalToday)
   };
 
-  const readyOrders = getOrders(orders, 'done');
+  const readyOrders = getOrders(feed.orders, 'done');
 
-  const pendingOrders = getOrders(orders, 'pending');
+  const pendingOrders = getOrders(feed.orders, 'pending');
 
   return (
     <FeedInfoUI

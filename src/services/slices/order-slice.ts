@@ -4,7 +4,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { RootState } from '../store';
 
-type TOrderState = {
+export type TOrderState = {
   order: TOrder | null;
   loading: boolean;
   error: boolean;

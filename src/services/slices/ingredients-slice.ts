@@ -4,7 +4,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { TIngredient } from '@utils-types';
 import { RootState } from '../store';
 
-type TIngredientsState = {
+export type TIngredientsState = {
   items: TIngredient[];
   loading: boolean;
   error: boolean;

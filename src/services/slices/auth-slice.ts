@@ -11,7 +11,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { RootState } from '../store';
 
-type TAuthState = {
+export type TAuthState = {
   user: TUser | null;
   isAuthChecked: boolean;
   loginLoading: boolean;

@@ -11,7 +11,7 @@ const CY_SELECTORS = {
   ORDER_BUTTON: '[data-cy="order-button"]'
 };
 
-describe('Constructor Page', () => {
+describe('constructor-page', () => {
   beforeEach(() => {
     cy.intercept('GET', '**/api/ingredients', {
       fixture: 'ingredients.json'
